@@ -6,6 +6,10 @@
  */
 
 use Composer\Autoload\ClassLoader;
+use Yoast\WP\SEO\Actions\Wincher\Wincher_Account_Action;
+use Yoast\WP\SEO\Actions\Wincher\Wincher_Keyphrases_Action;
+use Yoast\WP\SEO\Actions\Wincher\Wincher_Login_Action;
+use Yoast\WP\SEO\Routes\Wincher_Route;
 
 if ( ! function_exists( 'add_filter' ) ) {
 	header( 'Status: 403 Forbidden' );
@@ -17,7 +21,7 @@ if ( ! function_exists( 'add_filter' ) ) {
  * {@internal Nobody should be able to overrule the real version number as this can cause
  *            serious issues with the options, so no if ( ! defined() ).}}
  */
-define( 'WPSEO_VERSION', '17.2-RC2' );
+define( 'WPSEO_VERSION', '17.4-RC5' );
 
 
 if ( ! defined( 'WPSEO_PATH' ) ) {
@@ -37,7 +41,7 @@ define( 'YOAST_VENDOR_DEFINE_PREFIX', 'YOASTSEO_VENDOR__' );
 define( 'YOAST_VENDOR_PREFIX_DIRECTORY', 'vendor_prefixed' );
 
 define( 'YOAST_SEO_PHP_REQUIRED', '5.6' );
-define( 'YOAST_SEO_WP_TESTED', '5.8' );
+define( 'YOAST_SEO_WP_TESTED', '5.8.1' );
 define( 'YOAST_SEO_WP_REQUIRED', '5.6' );
 
 if ( ! defined( 'WPSEO_NAMESPACES' ) ) {
@@ -107,7 +111,7 @@ if ( YOAST_ENVIRONMENT === 'development' && isset( $yoast_autoloader ) ) {
 		 *
 		 * @return void
 		 */
-		function() use ( $yoast_autoloader ) {
+		static function() use ( $yoast_autoloader ) {
 			$yoast_autoloader->unregister();
 			$yoast_autoloader->register( true );
 		},
@@ -378,6 +382,14 @@ function wpseo_init_rest_api() {
 	foreach ( $endpoints as $endpoint ) {
 		$endpoint->register();
 	}
+
+	$wincher_routes = new Wincher_Route(
+		YoastSEO()->classes->get( Wincher_Login_Action::class ),
+		YoastSEO()->classes->get( Wincher_Account_Action::class ),
+		YoastSEO()->classes->get( Wincher_Keyphrases_Action::class )
+	);
+
+	$wincher_routes->register_routes();
 }
 
 /**

@@ -105,18 +105,18 @@ class WPSEO_Meta {
 	 */
 	public static $meta_fields = [
 		'general'  => [
-			'focuskw'        => [
+			'focuskw' => [
 				'type'  => 'hidden',
 				'title' => '',
 			],
-			'title'          => [
+			'title' => [
 				'type'          => 'hidden',
 				'title'         => '', // Translation added later.
 				'default_value' => '',
 				'description'   => '', // Translation added later.
 				'help'          => '', // Translation added later.
 			],
-			'metadesc'       => [
+			'metadesc' => [
 				'type'          => 'hidden',
 				'title'         => '', // Translation added later.
 				'default_value' => '',
@@ -125,13 +125,13 @@ class WPSEO_Meta {
 				'description'   => '', // Translation added later.
 				'help'          => '', // Translation added later.
 			],
-			'linkdex'        => [
+			'linkdex' => [
 				'type'          => 'hidden',
 				'title'         => 'linkdex',
 				'default_value' => '0',
 				'description'   => '',
 			],
-			'content_score'  => [
+			'content_score' => [
 				'type'          => 'hidden',
 				'title'         => 'content_score',
 				'default_value' => '0',
@@ -318,6 +318,8 @@ class WPSEO_Meta {
 			}
 		}
 		unset( $subset, $field_group, $key, $field_def );
+
+		self::filter_schema_article_types();
 
 		add_filter( 'update_post_metadata', [ __CLASS__, 'remove_meta_if_default' ], 10, 5 );
 		add_filter( 'add_post_metadata', [ __CLASS__, 'dont_save_meta_if_default' ], 10, 4 );
@@ -1048,5 +1050,21 @@ class WPSEO_Meta {
 		}
 
 		return $post_ids;
+	}
+
+	/**
+	 * Filter the schema article types.
+	 *
+	 * @return void
+	 */
+	public static function filter_schema_article_types() {
+		/**
+		 * Filter: 'wpseo_schema_article_types' - Allow developers to filter the available article types.
+		 *
+		 * Make sure when you filter this to also filter `wpseo_schema_article_types_labels`.
+		 *
+		 * @api array $schema_article_types The available schema article types.
+		 */
+		self::$meta_fields['schema']['schema_article_type']['options'] = apply_filters( 'wpseo_schema_article_types', self::$meta_fields['schema']['schema_article_type']['options'] );
 	}
 }

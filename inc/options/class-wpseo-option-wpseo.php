@@ -79,6 +79,10 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 		'enable_metabox_insights'                  => true,
 		'enable_link_suggestions'                  => true,
 		'algolia_integration_active'               => false,
+		'wincher_integration_active'               => true,
+		'wincher_tokens'                           => [],
+		'wincher_automatically_add_keyphrases'     => false,
+		'wincher_website_id'                       => '',
 	];
 
 	/**
@@ -263,6 +267,7 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 				case 'license_server_version':
 				case 'home_url':
 				case 'zapier_api_key':
+				case 'wincher_website_id':
 					if ( isset( $dirty[ $key ] ) ) {
 						$clean[ $key ] = $dirty[ $key ];
 					}
@@ -335,6 +340,7 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 				case 'semrush_tokens':
 				case 'custom_taxonomy_slugs':
 				case 'zapier_subscription':
+				case 'wincher_tokens':
 					$clean[ $key ] = $old[ $key ];
 
 					if ( isset( $dirty[ $key ] ) ) {
@@ -409,6 +415,7 @@ class WPSEO_Option_Wpseo extends WPSEO_Option {
 			'enable_enhanced_slack_sharing'  => false,
 			'semrush_integration_active'     => false,
 			'zapier_integration_active'      => false,
+			'wincher_integration_active'     => false,
 		];
 
 		// We can reuse this logic from the base class with the above defaults to parse with the correct feature values.
